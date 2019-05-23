@@ -201,6 +201,7 @@ resource "aws_iam_role_policy_attachment" "codebuild_s3" {
 
 resource "aws_codepipeline" "source_build_deploy" {
   count    = "${local.enabled ? 1 : 0}"
+  branch_filter = ".*"
   name     = "${module.codepipeline_label.id}"
   role_arn = "${aws_iam_role.default.arn}"
 
@@ -290,6 +291,7 @@ locals {
 
 resource "aws_codepipeline_webhook" "webhook" {
   count           = "${local.enabled && var.webhook_enabled == "true" ? 1 : 0}"
+  branch_filter = ".*"
   name            = "${module.codepipeline_label.id}"
   authentication  = "${var.webhook_authentication}"
   target_action   = "${var.webhook_target_action}"
